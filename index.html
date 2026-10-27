@@ -1,1 +1,123 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WireGuard4582</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;padding:18px;background:#090b19;color:white;font-family:Tahoma}
+.box{max-width:480px;margin:25px auto;background:#12162b;border:1px solid #7655ff;border-radius:18px;padding:22px}
+h2{text-align:center;color:#a995ff}
+input,select,button{width:100%;padding:13px;margin:8px 0;border-radius:9px;border:1px solid #5142a0;background:#090d20;color:white}
+button{background:linear-gradient(90deg,#633cff,#187bff);border:0;font-weight:bold}
+#result{display:none}
+small{color:#b9b2db}
+</style>
+</head>
+<body>
 
+<div class="box">
+<h2>🎮 WireGuard4582</h2>
+<p>ساخت پنل وایرگارد</p>
+
+<label>نام پنل</label>
+<input id="panelName" placeholder="نام پنل">
+
+<label>رمز پنل</label>
+<input id="panelPass" type="password" placeholder="رمز دلخواه">
+
+<label>حجم هر کاربر (GB)</label>
+<input id="volume" type="number" min="1" value="4">
+
+<label>تعداد کاربران</label>
+<input id="users" type="number" min="1" value="1">
+
+<label>مدت اعتبار (روز)</label>
+<input id="days" type="number" min="1" value="30">
+
+<button onclick="buildPanel()">ساخت پنل وایرگارد</button>
+<p id="status"><small>WireGuard4582</small></p>
+</div>
+
+<script>
+function buildPanel(){
+ const name=document.getElementById('panelName').value.trim();
+ const pass=document.getElementById('panelPass').value;
+ const volume=Number(document.getElementById('volume').value);
+ const users=Number(document.getElementById('users').value);
+ const days=Number(document.getElementById('days').value);
+
+ if(!name||!pass||volume<1||users<1||days<1){
+  document.getElementById('status').textContent='همه اطلاعات را درست وارد کن.';
+  return;
+ }
+
+ const html=`<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>${esc(name)}</title>
+<style>
+body{margin:0;padding:18px;background:#090b19;color:white;font-family:Tahoma}
+.box{max-width:460px;margin:25px auto;background:#12162b;border:1px solid #7655ff;border-radius:18px;padding:22px}
+h2{text-align:center;color:#a995ff}
+input,button{width:100%;padding:13px;margin:8px 0;box-sizing:border-box;border-radius:9px;border:1px solid #5142a0;background:#090d20;color:white}
+button{background:linear-gradient(90deg,#633cff,#187bff);border:0;font-weight:bold}
+small{color:#b9b2db}
+</style>
+</head>
+<body>
+<div class="box" id="login">
+<h2>${esc(name)}</h2>
+<input id="pw" type="password" placeholder="رمز ورود">
+<button onclick="enter()">ورود</button>
+<p id="err"></p>
+</div>
+<div class="box" id="main" hidden>
+<h2>${esc(name)}</h2>
+<p>حجم هر کاربر: ${volume} گیگابایت</p>
+<p>تعداد کاربران مجاز: ${users}</p>
+<p>مدت اعتبار: ${days} روز</p>
+<hr>
+<h3>ساخت کانفیگ وایرگارد</h3>
+<input id="clientName" placeholder="نام کاربر">
+<button onclick="createClient()">ساخت کانفیگ</button>
+<p id="msg"></p>
+<pre id="output" style="white-space:pre-wrap;direction:ltr"></pre>
+</div>
+<script>
+const secret=${JSON.stringify(pass)};
+function enter(){
+ if(document.getElementById('pw').value===secret){
+  document.getElementById('login').hidden=true;
+  document.getElementById('main').hidden=false;
+ }else document.getElementById('err').textContent='رمز اشتباه است.';
+}
+function createClient(){
+ const n=document.getElementById('clientName').value.trim();
+ if(!n){document.getElementById('msg').textContent='نام کاربر را وارد کن.';return;}
+ document.getElementById('msg').textContent=
+ 'برای تولید کانفیگ واقعی، اتصال به سرور WireGuard لازم است.';
+ document.getElementById('output').textContent='';
+}
+<\/script>
+</body>
+</html>`;
+
+ const blob=new Blob([html],{type:'text/html;charset=utf-8'});
+ const url=URL.createObjectURL(blob);
+ const a=document.createElement('a');
+ a.href=url;
+ a.download='WireGuard4582_Panel.html';
+ a.click();
+ setTimeout(()=>URL.revokeObjectURL(url),1000);
+ document.getElementById('status').textContent='فایل پنل ساخته شد.';
+}
+function esc(s){
+ return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+</script>
+</body>
+  </html>
